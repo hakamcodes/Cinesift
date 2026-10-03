@@ -43,7 +43,9 @@ function getAuthHeaders() {
  * @returns {string}
  */
 function buildUrl(path, params = {}) {
-  const url = new URL(`${TMDB_BASE}${path}`);
+  const fullPath = `${TMDB_BASE}${path}`;
+  const base = fullPath.startsWith('/') && typeof window !== 'undefined' ? window.location.origin : undefined;
+  const url = new URL(fullPath, base);
 
   // Add api_key only when Bearer token is absent.
   if (!TMDB_TOKEN && TMDB_API_KEY) {
