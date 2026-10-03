@@ -154,6 +154,7 @@
   gap: var(--s-6);
   padding: var(--s-6) var(--gutter);
   max-width: var(--container);
+  width: 100%;
   margin: 0 auto;
   align-items: start;
 }
