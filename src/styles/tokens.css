@@ -1,0 +1,60 @@
+/* styles/tokens.css
+ * Design tokens — ALL colours, spacing, type, motion.
+ * Import this first; all other CSS files reference these variables.
+ * From UI_UX_SPEC §2.
+ */
+
+:root {
+  /* ── Colour ── */
+  --bg:         #0b0c10;
+  --surface:    #14161c;
+  --surface-2:  #1c1f27;
+  --border:     #2a2e39;
+  --text:       #eceff4;
+  --text-muted: #a3a9b8;   /* ≥4.5:1 on --bg */
+  --accent:     #f5c518;   /* IMDB gold */
+  --accent-ink: #14110a;   /* dark ink on accent — ≥7:1 */
+  --success:    #3ecf8e;
+  --warn:       #f5a524;
+  --danger:     #ff5c6c;
+  --info:       #6aa9ff;
+  --focus:      #8ab4ff;   /* 3:1+ vs bg and surface */
+
+  /* ── Typography ── */
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-xs:  12px;
+  --fs-sm:  14px;
+  --fs-md:  16px;
+  --fs-lg:  20px;
+  --fs-xl:  28px;
+  --fs-2xl: 40px;
+  --lh-tight: 1.2;
+  --lh-body:  1.5;
+
+  /* ── Spacing (8-pt grid) ── */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* ── Shape ── */
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   20px;
+  --r-pill: 999px;
+  --shadow-1: 0 2px 8px rgb(0 0 0 / .35);
+
+  /* ── Motion ── */
+  --t-fast: 120ms;
+  --t-med:  200ms;
+  --t-slow: 300ms;
+  --ease:   cubic-bezier(.2, .8, .2, 1);
+
+  /* ── Layout ── */
+  --container: 1280px;
+  --gutter:    clamp(16px, 4vw, 40px);
+}

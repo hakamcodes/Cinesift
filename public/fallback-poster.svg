@@ -1,0 +1,6 @@
+<!-- fallback-poster.svg — used as a poster placeholder when image is null/broken -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300" width="200" height="300">
+  <rect width="200" height="300" fill="#1c1f27"/>
+  <text x="100" y="140" text-anchor="middle" font-size="48" fill="#2a2e39">🎬</text>
+  <text x="100" y="190" text-anchor="middle" font-size="14" fill="#a3a9b8" font-family="sans-serif">No image</text>
+</svg>
