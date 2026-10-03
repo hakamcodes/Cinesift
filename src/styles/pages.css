@@ -168,6 +168,7 @@
 
 .details-section {
   margin-bottom: var(--s-6);
+  min-width: 0;
 }
 
 .details-section h2 {
@@ -239,8 +240,8 @@
   white-space: nowrap;
 }
 
-/* ── Similar movies row ── */
-.similar-row {
+/* ── Gallery row ── */
+.gallery-row {
   display: flex;
   gap: var(--s-4);
   overflow-x: auto;
@@ -249,7 +250,7 @@
   scrollbar-width: thin;
 }
 
-.similar-row .movie-card {
+.gallery-row .movie-card {
   flex-shrink: 0;
   width: 180px;
   scroll-snap-align: start;

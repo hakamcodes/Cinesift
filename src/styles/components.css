@@ -650,18 +650,6 @@ img {
   font-weight: 600;
 }
 
-.horizontal-scroll {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: var(--s-4);
-  scrollbar-width: thin;
-}
-.horizontal-scroll .movie-card {
-  flex: 0 0 160px;
-  scroll-snap-align: start;
-}
-
 /* ── Modal & Trailer Modal ── */
 .modal {
   margin: auto;

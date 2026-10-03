@@ -248,7 +248,7 @@ export function mount(params, container) {
           return;
         }
         
-        const grid = h('div', { class: 'movie-grid horizontal-scroll' });
+        const grid = h('div', { class: 'movie-grid' });
         data.items.slice(0, 12).forEach((movie, idx) => {
           grid.appendChild(MovieCard(movie, idx < 4));
         });

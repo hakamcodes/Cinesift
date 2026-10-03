@@ -296,7 +296,7 @@ function renderSuccess(container, movie) {
     setText(gTitle, 'Gallery');
     galSec.appendChild(gTitle);
     
-    const galGrid = h('div', { class: 'similar-row' });
+    const galGrid = h('div', { class: 'gallery-row' });
     movie.backdrops.forEach((img, idx) => {
       const imgDiv = h('div', { 
         style: { 
@@ -364,33 +364,13 @@ function renderSuccess(container, movie) {
     setText(sTitle, 'Similar movies');
     headerRow.appendChild(sTitle);
     
-    const controls = h('div', { class: 'desktop-arrows', style: { display: 'flex', gap: '8px' } });
-    const btnLeft = h('button', { class: 'btn btn-secondary', style: { padding: '4px 8px', minHeight: '32px' }, 'aria-label': 'Scroll left' });
-    setText(btnLeft, '◀');
-    const btnRight = h('button', { class: 'btn btn-secondary', style: { padding: '4px 8px', minHeight: '32px' }, 'aria-label': 'Scroll right' });
-    setText(btnRight, '▶');
-    
-    controls.appendChild(btnLeft);
-    controls.appendChild(btnRight);
-    headerRow.appendChild(controls);
     simSec.appendChild(headerRow);
     
-    const simGrid = h('div', { class: 'similar-row' });
+    const simGrid = h('div', { class: 'movie-grid' });
     movie.similar.forEach((m, idx) => {
       simGrid.appendChild(MovieCard(m, idx < 4));
     });
-    
-    btnLeft.addEventListener('click', () => {
-      simGrid.scrollBy({ left: -360, behavior: 'smooth' });
-    });
-    btnRight.addEventListener('click', () => {
-      simGrid.scrollBy({ left: 360, behavior: 'smooth' });
-    });
-    
-    // Hide arrows on mobile via CSS
-    const style = document.createElement('style');
-    style.textContent = `@media(max-width:959px){.desktop-arrows{display:none!important;}}`;
-    simSec.appendChild(style);
+
     
     simSec.appendChild(simGrid);
     leftCol.appendChild(simSec);
