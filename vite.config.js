@@ -1,9 +1,17 @@
-import { defineConfig } from 'vite';
+﻿import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // Vitest config lives here too — no separate file needed
+  server: {
+    proxy: {
+      '/api/tmdb': {
+        target: 'https://api.themoviedb.org/3',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/tmdb/, '')
+      }
+    }
+  },
   test: {
-    environment: 'jsdom',   // gives window, localStorage, AbortController, etc.
-    globals: true,           // so tests can call describe/it/expect without importing
+    environment: 'jsdom',
+    globals: true,
   },
 });

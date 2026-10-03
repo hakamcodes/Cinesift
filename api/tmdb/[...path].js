@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   const { path, ...query } = req.query;
   const tmdbPath = Array.isArray(path) ? path.join('/') : path;
   
-  const url = new URL(\https://api.themoviedb.org/3/\\);
+  const url = new URL(`https://api.themoviedb.org/3/${tmdbPath}`);
   for (const [k, v] of Object.entries(query)) {
     url.searchParams.append(k, v);
   }
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   };
   
   if (token) {
-    headers['Authorization'] = \Bearer \\;
+    headers['Authorization'] = `Bearer ${token}`;
   } else if (apiKey) {
     url.searchParams.append('api_key', apiKey);
   }
