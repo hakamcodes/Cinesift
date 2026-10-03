@@ -100,7 +100,7 @@ function resetHeaderInput() {
 const originalOnInput = controller.onInput.bind(controller);
 controller.onInput = (raw) => {
   if (window.location.pathname !== '/search' && raw.trim().length > 0) {
-    router.navigate('/search');
+    router.navigate('/search', { focusSearch: true });
   }
   originalOnInput(raw);
 };

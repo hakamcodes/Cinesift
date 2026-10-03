@@ -97,12 +97,25 @@ export function createRouter({ main, getPageModule }) {
 
     // Focus the h1 for screen readers (UI_UX_SPEC §9).
     requestAnimationFrame(() => {
-      const h1 = main.querySelector('h1[tabindex="-1"]') || main.querySelector('h1');
-      if (h1) {
-        if (!h1.getAttribute('tabindex')) h1.setAttribute('tabindex', '-1');
-        h1.focus({ preventScroll: false });
+      if (history.state && history.state.focusSearch) {
+        const globalInput = document.querySelector('.site-header .search-input');
+        if (globalInput) {
+          globalInput.focus({ preventScroll: true });
+          const len = globalInput.value.length;
+          globalInput.setSelectionRange(len, len);
+          
+          const newState = { ...history.state };
+          delete newState.focusSearch;
+          history.replaceState(newState, '');
+        }
+      } else {
+        const h1 = main.querySelector('h1[tabindex="-1"]') || main.querySelector('h1');
+        if (h1) {
+          if (!h1.getAttribute('tabindex')) h1.setAttribute('tabindex', '-1');
+          h1.focus({ preventScroll: false });
+        }
+        window.scrollTo(0, 0);
       }
-      window.scrollTo(0, 0);
     });
   }
 

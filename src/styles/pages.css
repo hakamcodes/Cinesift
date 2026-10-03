@@ -170,6 +170,7 @@
 .details-section {
   margin-bottom: var(--s-6);
   min-width: 0;
+  max-width: 100%;
 }
 
 .details-section h2 {
@@ -193,6 +194,7 @@
   overflow-x: auto;
   padding-bottom: var(--s-3);
   scrollbar-width: thin;
+  max-width: 100%;
 }
 
 .cast-member {
@@ -249,6 +251,7 @@
   scroll-snap-type: x mandatory;
   padding-bottom: var(--s-3);
   scrollbar-width: thin;
+  max-width: 100%;
 }
 
 .gallery-row .movie-card {
@@ -307,8 +310,8 @@
 /* ── Responsive: details page ── */
 @media (max-width: 959px) {
   .details-main {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 100%;
   }
   .details-left, .details-right {
     display: contents;

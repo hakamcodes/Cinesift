@@ -89,14 +89,6 @@ export function subscribe(fn) {
 }
 
 /**
- * Get current history snapshot.
- * @returns {{ items: object[], available: boolean }}
- */
-export function getState() {
-  return { ...state };
-}
-
-/**
  * Add or promote a query to the top of history.
  * Only call this when a search returned success OR user pressed Enter.
  *

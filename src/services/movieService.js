@@ -125,5 +125,3 @@ export async function genres(signal = null) {
   return map;
 }
 
-/** Expose cache for testing / diagnostics. */
-export { cache };

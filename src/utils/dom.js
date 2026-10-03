@@ -16,29 +16,6 @@ export function qs(selector, root = document) {
 }
 
 /**
- * Query all matching elements.
- * @param {string} selector
- * @param {Element|Document} [root=document]
- * @returns {Element[]}
- */
-export function qsa(selector, root = document) {
-  return Array.from(root.querySelectorAll(selector));
-}
-
-/**
- * Add an event listener and return an unsubscribe function.
- * @param {EventTarget} target
- * @param {string} event
- * @param {Function} fn
- * @param {object} [opts]
- * @returns {Function} cleanup
- */
-export function on(target, event, fn, opts) {
-  target.addEventListener(event, fn, opts);
-  return () => target.removeEventListener(event, fn, opts);
-}
-
-/**
  * Set textContent safely (no XSS from API/user text).
  * @param {Element} el
  * @param {string} text
