@@ -72,6 +72,7 @@ function buildUrl(path, params = {}) {
  */
 async function http(path, params, signal) {
   const url = buildUrl(path, params);
+  console.log('TMDB_FETCH_URL:', url);
   let res;
   try {
     res = await fetch(url, {
@@ -82,8 +83,11 @@ async function http(path, params, signal) {
       },
     });
   } catch (e) {
+
     // AbortError means the caller cancelled us — rethrow unchanged.
     if (e.name === 'AbortError') throw e;
+    // TimeoutError means requestManager aborted due to timeout.
+    if (e.name === 'TimeoutError') throw new AppError(ErrorCategory.TIMEOUT, 'Request timed out', { retryable: true });
     // TypeError typically means offline / DNS failure.
     throw new AppError(ErrorCategory.NETWORK, e.message, { cause: e, retryable: true });
   }
@@ -266,6 +270,9 @@ export function normaliseMovieDetails(json, selfId) {
   const crew    = Array.isArray(json.credits?.crew) ? json.credits.crew : [];
   const cast    = Array.isArray(json.credits?.cast) ? json.credits.cast : [];
   const director = crew.find(c => c.job === 'Director')?.name ?? null;
+  const writers = [...new Set(crew.filter(c => c.department === 'Writing').map(c => c.name))].slice(0, 3);
+  const producers = [...new Set(crew.filter(c => c.job === 'Producer').map(c => c.name))].slice(0, 3);
+  const composers = [...new Set(crew.filter(c => c.job === 'Original Music Composer').map(c => c.name))].slice(0, 3);
   const topCast  = cast.slice(0, 12).map(normaliseCastMember);
 
   // Videos (YouTube only).
@@ -280,8 +287,8 @@ export function normaliseMovieDetails(json, selfId) {
     .slice(0, 12)
     .map(b => Object.freeze({ filePath: b.file_path, width: b.width ?? 0, height: b.height ?? 0 }));
 
-  // Similar — exclude self, take 12.
-  const rawSimilar = Array.isArray(json.similar?.results) ? json.similar.results : [];
+  // Similar (using recommendations for better accuracy) — exclude self, take 12.
+  const rawSimilar = Array.isArray(json.recommendations?.results) ? json.recommendations.results : (Array.isArray(json.similar?.results) ? json.similar.results : []);
   const similar = rawSimilar
     .filter(m => m.id !== selfId)
     .slice(0, 12)
@@ -295,6 +302,26 @@ export function normaliseMovieDetails(json, selfId) {
 
   const runtime = json.runtime > 0 ? json.runtime : null;
 
+  // Production countries
+  const productionCountries = Array.isArray(json.production_countries) ? json.production_countries.map(c => c.name) : [];
+
+  // Watch providers
+  const watchProvidersRaw = json['watch/providers']?.results?.US || json['watch/providers']?.results?.GB || {};
+  const watchProviders = {
+    stream: Array.isArray(watchProvidersRaw.flatrate) ? watchProvidersRaw.flatrate.map(p => p.provider_name) : [],
+    rent: Array.isArray(watchProvidersRaw.rent) ? watchProvidersRaw.rent.map(p => p.provider_name) : [],
+    buy: Array.isArray(watchProvidersRaw.buy) ? watchProvidersRaw.buy.map(p => p.provider_name) : []
+  };
+
+  // Reviews
+  const reviews = Array.isArray(json.reviews?.results)
+    ? json.reviews.results.slice(0, 3).map(r => Object.freeze({
+        author: r.author,
+        content: r.content,
+        rating: r.author_details?.rating || null
+      }))
+    : [];
+
   return Object.freeze({
     ...summary,
     backdropPath: json.backdrop_path || null,
@@ -304,11 +331,17 @@ export function normaliseMovieDetails(json, selfId) {
     status:       json.status || null,
     imdbId:       json.imdb_id || null,
     director,
+    writers,
+    producers,
+    composers,
     cast:         topCast,
     trailer,
     videos,
     backdrops,
     similar,
+    productionCountries,
+    watchProviders,
+    reviews,
   });
 }
 
@@ -322,7 +355,7 @@ export function normaliseMovieDetails(json, selfId) {
  */
 export async function details(id, signal = null) {
   const json = await http(`/movie/${id}`, {
-    append_to_response:    'credits,videos,images,similar',
+    append_to_response:    'credits,videos,images,similar,recommendations,watch/providers,reviews',
     include_image_language: 'en,null',
     language:              'en-US',
   }, signal);

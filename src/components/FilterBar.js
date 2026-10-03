@@ -1,8 +1,3 @@
-/**
- * components/FilterBar.js
- * Shows the filter options (genre, year, min rating, sort) and filter notice.
- */
-
 import { h, setText } from '../utils/dom.js';
 
 export function FilterBar({ filters, onFilterChange, isClientSide, genresMap }) {
@@ -74,11 +69,58 @@ export function FilterBar({ filters, onFilterChange, isClientSide, genresMap }) 
     });
   };
 
-  genreSelect.addEventListener('change', apply);
-  yearInput.addEventListener('change', apply);
-  ratingSelect.addEventListener('change', apply);
-  sortSelect.addEventListener('change', apply);
+  const isMobile = window.matchMedia('(max-width: 600px)').matches;
 
-  container.appendChild(controls);
+  if (isMobile) {
+    const triggerBtn = h('button', { class: 'btn btn-secondary filter-trigger', style: { width: '100%', marginBottom: '16px' } });
+    setText(triggerBtn, 'Filters');
+    container.appendChild(triggerBtn);
+
+    const dialog = h('dialog', { class: 'filter-dialog', style: { padding: '16px', borderRadius: '16px', border: 'none', background: 'var(--surface)', width: '100%', maxWidth: '100%', margin: 'auto 0 0 0' } });
+    
+    // Bottom sheet animation styling
+    dialog.style.transform = 'translateY(100%)';
+    dialog.style.transition = 'transform 0.3s ease';
+
+    controls.style.display = 'flex';
+    controls.style.flexDirection = 'column';
+    controls.style.gap = '16px';
+    controls.style.marginBottom = '16px';
+
+    dialog.appendChild(controls);
+
+    const applyBtn = h('button', { class: 'btn btn-primary' });
+    setText(applyBtn, 'Show results');
+    applyBtn.addEventListener('click', () => {
+      dialog.style.transform = 'translateY(100%)';
+      setTimeout(() => dialog.close(), 300);
+      apply();
+    });
+    dialog.appendChild(applyBtn);
+
+    container.appendChild(dialog);
+
+    triggerBtn.addEventListener('click', () => {
+      dialog.showModal();
+      // small delay to allow display: block to apply before transforming
+      requestAnimationFrame(() => {
+        dialog.style.transform = 'translateY(0)';
+      });
+    });
+
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) {
+        dialog.style.transform = 'translateY(100%)';
+        setTimeout(() => dialog.close(), 300);
+      }
+    });
+  } else {
+    genreSelect.addEventListener('change', apply);
+    yearInput.addEventListener('change', apply);
+    ratingSelect.addEventListener('change', apply);
+    sortSelect.addEventListener('change', apply);
+    container.appendChild(controls);
+  }
+
   return container;
 }

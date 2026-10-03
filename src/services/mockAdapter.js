@@ -178,8 +178,19 @@ export async function details(id, signal = null) {
     ],
     trailer: { key: 'dQw4w9WgXcQ', site: 'YouTube', type: 'Trailer', name: 'Trailer', official: true },
     videos: [],
-    backdrops: [],
-    similar: []
+    backdrops: [
+      { filePath: base.poster_path, width: 1280, height: 720 },
+      { filePath: base.poster_path, width: 1280, height: 720 }
+    ],
+    similar: [],
+    writers: ['Bob Kane', 'Bill Finger'],
+    producers: ['Charles Roven', 'Emma Thomas'],
+    composers: ['Hans Zimmer'],
+    productionCountries: ['United States', 'United Kingdom'],
+    watchProviders: { stream: ['Netflix'], rent: ['Apple TV'], buy: ['Amazon Video'] },
+    reviews: [
+      { author: 'Mock Reviewer', content: 'This movie is absolutely amazing! A masterpiece.', rating: 9 }
+    ]
   };
 }
 

@@ -67,7 +67,7 @@ export function createSearchController(store, diag) {
   // ── URL sync helpers ──────────────────────────────────────────────────
 
   /** Sync current query to the URL without adding a history entry. */
-  function syncUrlReplace(query) {
+  function syncUrlParams(query, push = false) {
     if (typeof history === 'undefined') return;
     const url = new URL(window.location.href);
     if (query) {
@@ -75,7 +75,29 @@ export function createSearchController(store, diag) {
     } else {
       url.searchParams.delete('q');
     }
-    history.replaceState(null, '', url.toString());
+    
+    const filters = store.getState().search.filters || {};
+    if (filters.genre) url.searchParams.set('genre', filters.genre);
+    else url.searchParams.delete('genre');
+    
+    if (filters.year) url.searchParams.set('year', filters.year);
+    else url.searchParams.delete('year');
+    
+    if (filters.minRating > 0) url.searchParams.set('rating', filters.minRating);
+    else url.searchParams.delete('rating');
+    
+    if (filters.sort && filters.sort !== 'popularity.desc') url.searchParams.set('sort', filters.sort);
+    else url.searchParams.delete('sort');
+
+    if (push) {
+      history.pushState(null, '', url.toString());
+    } else {
+      history.replaceState(null, '', url.toString());
+    }
+  }
+
+  function syncUrlReplace(query) {
+    syncUrlParams(query, false);
   }
 
   // ── Core search execution ─────────────────────────────────────────────
@@ -121,7 +143,7 @@ export function createSearchController(store, diag) {
         if (isBrowseMode) {
           return movieService.discover({ ...filters, page }, signal);
         } else {
-          return movieService.search({ query, page }, signal);
+          return movieService.search({ query, page, year: filters.year || null }, signal);
         }
       },
       { query }
@@ -147,10 +169,7 @@ export function createSearchController(store, diag) {
       } else {
         dispatch({ type: 'SEARCH_SUCCESS', query, page, data });
         if (page === 1) {
-          const url = new URL(window.location.href);
-          if (query) url.searchParams.set('q', query);
-          else url.searchParams.delete('q');
-          history.pushState(null, '', url.toString());
+          syncUrlParams(query, true);
         }
       }
 
@@ -214,10 +233,24 @@ export function createSearchController(store, diag) {
   }
 
   function restoreFromUrl() {
-    const q = new URLSearchParams(window.location.search).get('q') || '';
-    const state = store.getState().search;
-    const filters = state.filters || {};
-    const isBrowseMode = !q && (filters.genre || filters.year || filters.minRating > 0 || filters.sort !== 'popularity.desc');
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q') || '';
+    
+    const urlGenre = params.get('genre') ? parseInt(params.get('genre'), 10) : null;
+    const urlYear = params.get('year') ? parseInt(params.get('year'), 10) : null;
+    const urlRating = params.get('rating') ? parseFloat(params.get('rating')) : 0;
+    const urlSort = params.get('sort') || 'popularity.desc';
+
+    const newFilters = {
+      genre: urlGenre,
+      year: urlYear,
+      minRating: urlRating,
+      sort: urlSort
+    };
+    
+    dispatch({ type: 'FILTER_CHANGED', filters: newFilters });
+    
+    const isBrowseMode = !q && (newFilters.genre || newFilters.year || newFilters.minRating > 0 || newFilters.sort !== 'popularity.desc');
     
     if (!isBrowseMode && (!q || !isValidQuery(normalizeQuery(q)))) return;
     
@@ -244,10 +277,10 @@ export function createSearchController(store, diag) {
     // If there is an active text query, filters are client-side only (API_SPEC §4).
     // We don't trigger a new search request. The UI will filter the displayed results.
     // However, if there is NO text query, we are in Browse Mode and must fetch from /discover.
-    if (!query) {
-      debouncedSearch.cancel();
-      executeSearch('');
-    }
+    // AC-FL-4: Changing a filter aborts in-flight requests, resets page=1, runs immediately.
+    // AC-FL-3: Year is sent to the API.
+    debouncedSearch.cancel();
+    executeSearch(query);
   }
 
   return { onInput, onSubmit, retry, restoreFromUrl, unmount, loadMore, applyFilters };

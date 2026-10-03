@@ -1,4 +1,5 @@
-ï»¿/**
+import os
+content = '''/**
  * components/Header.js
  * Sticky site header with logo and search bar.
  */
@@ -29,7 +30,7 @@ export function Header({ onInput, onSubmit, onClear, store }) {
     maxlength: '100',
     autocomplete: 'off',
     enterkeyhint: 'search',
-    placeholder: 'Search movies...',
+    placeholder: 'Search movies…',
     'aria-label': 'Search movies',
     'aria-autocomplete': 'list',
     role: 'combobox',
@@ -43,7 +44,7 @@ export function Header({ onInput, onSubmit, onClear, store }) {
     type: 'button',
     'aria-label': 'Clear search',
   });
-  setText(clearBtn, 'X');
+  setText(clearBtn, '×');
 
   const hint = h('p', { class: 'search-hint', 'aria-live': 'polite' });
 
@@ -273,3 +274,7 @@ export function Header({ onInput, onSubmit, onClear, store }) {
 
   return header;
 }
+'''
+with open('src/components/Header.js', 'w', encoding='utf-8') as f:
+    f.write(content)
+print("Header rewritten")

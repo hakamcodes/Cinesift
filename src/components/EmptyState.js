@@ -21,7 +21,7 @@ const SUGGESTIONS = ['Inception', 'Parasite', 'Batman', 'Interstellar', 'The God
  * @returns {HTMLElement}
  */
 export function EmptyState({ query, onClear, onSuggestion }) {
-  const wrapper = h('div', { class: 'empty-state', role: 'region', 'aria-label': 'No results' });
+  const wrapper = h('div', { class: 'empty-state', role: 'region', 'aria-label': `No results for "${query}"` });
 
   // Film-strip emoji as decorative icon.
   const icon = h('div', { class: 'empty-state-icon', 'aria-hidden': 'true' });

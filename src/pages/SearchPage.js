@@ -23,6 +23,9 @@ export function mount(params, container, { store, controller, setHeaderInput }) 
   const page = h('div', { class: 'search-page' });
   container.appendChild(page);
   
+  // Initialize state from URL params (e.g. ?genre=99) on every mount
+  controller.restoreFromUrl();
+  
   // Fetch genres map once for the filter bar
   movieService.genres().then(map => {
     cachedGenres = map;
@@ -105,6 +108,23 @@ export function mount(params, container, { store, controller, setHeaderInput }) 
           setText(feH1, 'No movies match these filters');
           filteredEmpty.appendChild(feIcon);
           filteredEmpty.appendChild(feH1);
+          
+          const resetBtn = h('button', { class: 'btn btn-secondary', type: 'button' });
+          setText(resetBtn, 'Reset filters');
+          resetBtn.addEventListener('click', () => controller.applyFilters({ genre: null, year: null, minRating: 0, sort: 'popularity.desc' }));
+          filteredEmpty.appendChild(resetBtn);
+          
+          if (currentPage < totalPages) {
+            filteredEmpty.appendChild(LoadMoreButton({
+              onClick: controller.loadMore,
+              loading: loadingMore
+            }));
+          } else if (totalPages > 0 && currentPage >= totalPages) {
+            const endText = h('p', { class: 'results-count', style: { textAlign: 'center', marginTop: 'var(--s-4)' } });
+            setText(endText, 'End of results');
+            filteredEmpty.appendChild(endText);
+          }
+          
           wrapper.appendChild(filteredEmpty);
         } else {
           renderResultsGrid(wrapper, displayedResults, committedQuery, totalResults);
@@ -114,6 +134,10 @@ export function mount(params, container, { store, controller, setHeaderInput }) 
               onClick: controller.loadMore,
               loading: loadingMore
             }));
+          } else if (totalPages > 0 && currentPage >= totalPages) {
+            const endText = h('p', { class: 'results-count', style: { textAlign: 'center', marginTop: 'var(--s-4)' } });
+            setText(endText, 'End of results');
+            wrapper.appendChild(endText);
           }
         }
         break;

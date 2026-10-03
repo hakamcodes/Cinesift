@@ -32,6 +32,9 @@ export function DiagnosticsPanel(diag) {
 
   const title = h('h2');
   setText(title, 'Search Diagnostics');
+  title.addEventListener('click', () => {
+    panel.classList.toggle('expanded');
+  });
 
   panel.appendChild(title);
 

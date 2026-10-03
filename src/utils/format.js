@@ -19,7 +19,11 @@ import { IMG_BASE } from '../config.js';
  */
 export function imageUrl(path, size) {
   if (!path) return null;
-  return `${IMG_BASE}/${size}${path}`;
+  // TMDB path already starts with "/" (e.g. "/abc.jpg").
+  // IMG_BASE = "https://image.tmdb.org/t/p"  (no trailing slash)
+  // Result:  "https://image.tmdb.org/t/p/w342/abc.jpg"
+  const normalised = path.startsWith('/') ? path : `/${path}`;
+  return `${IMG_BASE}/${size}${normalised}`;
 }
 
 /**

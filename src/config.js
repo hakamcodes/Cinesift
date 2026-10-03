@@ -33,19 +33,16 @@ export const TMDB_BASE = 'https://api.themoviedb.org/3';
  * Injected by Vite from .env.local at build time.
  * Default to 'mock' so the app works even without credentials.
  */
-export const TMDB_MODE = import.meta.env.VITE_TMDB_MODE || 'mock';
+const getEnv = (key, def) => {
+  if (typeof process !== 'undefined' && process.env && process.env[key] !== undefined) return process.env[key];
+  if (typeof import.meta !== 'undefined' && import.meta.env) return import.meta.env[key] || def;
+  return def;
+};
 
-/**
- * Bearer token for 'direct' mode.
- * NEVER log this value or include it in error messages.
- */
-export const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN || '';
+export const TMDB_MODE = getEnv('VITE_TMDB_MODE', 'mock');
+export const TMDB_TOKEN = getEnv('VITE_TMDB_TOKEN', '');
+export const TMDB_API_KEY = getEnv('VITE_TMDB_API_KEY', '');
 
-/**
- * Alternative API key (query param) for 'direct' mode.
- * Used only if TMDB_TOKEN is empty.
- */
-export const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY || '';
 
 /** Maximum page number TMDB allows for search/discover. */
 export const MAX_PAGE = 500;

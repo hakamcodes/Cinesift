@@ -46,6 +46,7 @@ const header = Header({
   onInput:  (raw) => controller.onInput(raw),
   onSubmit: ()    => controller.onSubmit(),
   onClear:  ()    => controller.onInput(''), // treat clear as empty input
+  store,
 });
 
 // Live region for screen readers (result announcements).
@@ -151,7 +152,6 @@ const router = createRouter({
 const qFromUrl = new URLSearchParams(window.location.search).get('q') || '';
 if (qFromUrl) {
   setHeaderInput(qFromUrl);
-  controller.restoreFromUrl();
   if (window.location.pathname === '/') {
     router.replace('/search?q=' + encodeURIComponent(qFromUrl));
   }

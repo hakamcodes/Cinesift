@@ -131,10 +131,23 @@ export function createRouter({ main, getPageModule }) {
    */
   function start() {
     // Handle browser back/forward.
-    window.addEventListener('popstate', () => {
+    window.addEventListener('popstate', (e) => {
       const { page, params } = resolve(window.location.pathname);
-      doMount(page, { ...params, search: new URLSearchParams(window.location.search) });
+      doMount(page, { ...params, search: new URLSearchParams(window.location.search) }).then(() => {
+        if (e.state && typeof e.state.scrollY === 'number') {
+          requestAnimationFrame(() => window.scrollTo(0, e.state.scrollY));
+        }
+      });
     });
+
+    // Save scroll position before navigating away
+    window.addEventListener('scroll', () => {
+      if (history.state) {
+        history.replaceState({ ...history.state, scrollY: window.scrollY }, '');
+      } else {
+        history.replaceState({ scrollY: window.scrollY }, '');
+      }
+    }, { passive: true });
 
     // Intercept <a data-link> clicks for SPA navigation.
     document.addEventListener('click', (e) => {
