@@ -62,20 +62,23 @@ export function mount(params, container) {
   const searchHint = h('span', { class: 'hero-search-hint', 'aria-hidden': 'true' });
   setText(searchHint, '⌘K');
 
-  // Wire hero search to global header search
-  searchInput.addEventListener('input', (e) => {
-    const globalInput = document.querySelector('.site-header .search-input');
-    if (globalInput) {
-      globalInput.value = e.target.value;
-      globalInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  });
+  // Wire hero search to only trigger navigation on Enter
   searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const globalInput = document.querySelector('.site-header .search-input');
-      if (globalInput) {
-        globalInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      const val = e.target.value.trim();
+      if (val) {
+        // Find the global input to update it, but trigger navigation via router to avoid destroying the active element mid-keystroke
+        const globalInput = document.querySelector('.site-header .search-input');
+        if (globalInput) {
+          globalInput.value = val;
+        }
+        import('../router/router.js').then(() => {
+          // This is a bit hacky, normally we'd pass the router instance, but we can just use history API directly
+          history.pushState({}, '', `/search?q=${encodeURIComponent(val)}`);
+          // Dispatch popstate to let the router handle it
+          window.dispatchEvent(new PopStateEvent('popstate'));
+        });
       }
     }
   });

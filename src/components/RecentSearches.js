@@ -9,8 +9,6 @@ import * as historyStore from '../state/historyStore.js';
 export function RecentSearches({ onSelect }) {
   const container = h('div', { class: 'recent-searches' });
   
-  let unsub = null;
-  
   const render = (state) => {
     container.innerHTML = '';
     if (state.items.length === 0) return;
@@ -49,7 +47,7 @@ export function RecentSearches({ onSelect }) {
     container.appendChild(chips);
   };
   
-  unsub = historyStore.subscribe(render);
+  const unsub = historyStore.subscribe(render);
   
   // Expose cleanup
   container._cleanup = unsub;

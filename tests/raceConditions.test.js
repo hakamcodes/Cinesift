@@ -11,7 +11,7 @@
  * Uses manual deferred promises to control resolution order.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createRequestManager } from '../src/services/requestManager.js';
 import { searchReducer }        from '../src/state/searchState.js';
 
@@ -85,7 +85,7 @@ describe('requestManager — out-of-order resolution (R-3)', () => {
     expect(state.results[0].id).toBe(155);
 
     // Now simulate A's late success with query='bat' — should be rejected.
-    const before = { ...state };
+
     const after = searchReducer(state, {
       type: 'SEARCH_SUCCESS',
       query: 'bat',      // ← does NOT match current state.query='batman'

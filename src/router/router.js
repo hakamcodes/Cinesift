@@ -33,8 +33,6 @@ const ROUTES = [
 /** @type {{ unmount?: Function } | null} */
 let currentPage = null;
 
-/** @type {Function | null} */
-let mountPage = null;
 
 /**
  * Create and start the router.

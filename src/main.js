@@ -17,13 +17,8 @@ import { createStore }        from './state/store.js';
 import { createDiagnostics }  from './utils/diagnostics.js';
 import { createSearchController } from './controllers/searchController.js';
 import { Header }             from './components/Header.js';
-import { MovieCard }          from './components/MovieCard.js';
-import { SkeletonGrid }       from './components/SkeletonGrid.js';
-import { EmptyState }         from './components/EmptyState.js';
-import { ErrorState }         from './components/ErrorState.js';
 import { DiagnosticsPanel }   from './components/DiagnosticsPanel.js';
-import { h, setText, qs }     from './utils/dom.js';
-import { normalizeQuery }     from './utils/normalizeQuery.js';
+import { h, setText }         from './utils/dom.js';
 
 import { createRouter } from './router/router.js';
 import * as historyStore from './state/historyStore.js';
@@ -104,9 +99,7 @@ function setHeaderInput(value) {
   if (header._setQuery) header._setQuery(value);
 }
 
-function resetHeaderInput() {
-  if (header._setQuery) header._setQuery('');
-}
+
 
 // Intercept header input to navigate to /search if we aren't there.
 const originalOnInput = controller.onInput.bind(controller);

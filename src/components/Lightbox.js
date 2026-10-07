@@ -1,4 +1,4 @@
-import { h, setText, setVisible } from '../utils/dom.js';
+import { h, setText } from '../utils/dom.js';
 import { imageUrl } from '../utils/format.js';
 import '../styles/components.css'; // Just to make sure
 

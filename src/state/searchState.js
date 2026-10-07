@@ -118,7 +118,7 @@ export function searchReducer(state, action) {
         loadingMore: true,
       };
 
-    case 'LOAD_MORE_SUCCESS':
+    case 'LOAD_MORE_SUCCESS': {
       if (action.query !== state.query || action.page !== state.page + 1) return state;
       // Dedupe by id.
       const existingIds = new Set(state.results.map(x => x.id));
@@ -131,6 +131,7 @@ export function searchReducer(state, action) {
         totalPages: action.data.totalPages,
         totalResults: action.data.totalResults,
       };
+    }
 
     case 'LOAD_MORE_ERROR':
       return {

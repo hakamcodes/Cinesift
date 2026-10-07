@@ -98,7 +98,7 @@ async function http(path, params, signal) {
   let json;
   try {
     json = await res.json();
-  } catch (e) {
+  } catch {
     throw new AppError(ErrorCategory.MALFORMED, 'Invalid JSON', { retryable: true });
   }
   return json;

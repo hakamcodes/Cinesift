@@ -12,7 +12,7 @@
  * It NEVER touches the DOM or imports tmdbAdapter directly.
  */
 
-import { DEBOUNCE_MS, MIN_QUERY } from '../config.js';
+import { DEBOUNCE_MS } from '../config.js';
 import { debounce } from '../utils/debounce.js';
 import { normalizeQuery, isValidQuery } from '../utils/normalizeQuery.js';
 import { createRequestManager } from '../services/requestManager.js';

@@ -16,7 +16,7 @@
  *   - Cross-tab sync via 'storage' event.
  */
 
-import { isAvailable, safeGet, safeSet, safeRemove, writeJSON } from '../utils/storage.js';
+import { isAvailable, safeGet, writeJSON } from '../utils/storage.js';
 
 const KEY = 'cinesift:watchlist:v1';
 const CURRENT_VERSION = 1;

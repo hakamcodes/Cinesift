@@ -1,9 +1,9 @@
-﻿/**
+/**
  * components/Header.js
  * Sticky site header with logo and search bar.
  */
 
-import { h, setText, qs } from '../utils/dom.js';
+import { h, setText } from '../utils/dom.js';
 import { imageUrl, formatYear } from '../utils/format.js';
 
 export function Header({ onInput, onSubmit, onClear, store }) {
@@ -173,7 +173,7 @@ export function Header({ onInput, onSubmit, onClear, store }) {
       return;
     }
     
-    suggestions.forEach((item, idx) => {
+    suggestions.forEach((item) => {
       const li = h('li', {
         id: 'sugg-' + item.id,
         role: 'option',

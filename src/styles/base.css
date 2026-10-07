@@ -38,6 +38,11 @@ a {
   outline-offset: 2px;
 }
 
+/* Hide focus ring on programmatic focus of h1 elements for accessibility */
+h1[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* ── Screen-reader only (visually hidden but accessible) ── */
 .sr-only {
   position: absolute;
