@@ -74,7 +74,6 @@ function buildUrl(path, params = {}) {
  */
 async function http(path, params, signal) {
   const url = buildUrl(path, params);
-  console.log('TMDB_FETCH_URL:', url);
   let res;
   try {
     res = await fetch(url, {

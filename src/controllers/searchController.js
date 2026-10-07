@@ -133,7 +133,6 @@ export function createSearchController(store, diag) {
     if (isLoadMore) {
       dispatch({ type: 'LOAD_MORE_START' });
     } else {
-      dispatch({ type: 'SEARCH_START', query, id: 0 });
       syncUrlReplace(query);
     }
 

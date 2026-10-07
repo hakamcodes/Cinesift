@@ -22,7 +22,7 @@ const INITIAL_STATE = {
       genre: null,
       year: null,
       minRating: 0,
-      sort: 'relevance',
+      sort: 'popularity.desc',
     },
     page: 1,
     totalPages: 0,
@@ -55,7 +55,7 @@ export function createStore() {
    * @returns {object}
    */
   function getState() {
-    return state; // Callers must not mutate this.
+    return Object.freeze({ ...state });
   }
 
   /**

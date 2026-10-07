@@ -30,10 +30,6 @@ export function mount(params, container) {
     return;
   }
 
-  if (window.__cinesift?.requestManager) {
-    window.__cinesift.requestManager.abort('details');
-  }
-  
   const ctrl = new AbortController();
   let active = true;
 
@@ -368,7 +364,7 @@ function renderSuccess(container, movie) {
     
     const simGrid = h('div', { class: 'movie-grid' });
     movie.similar.forEach((m, idx) => {
-      simGrid.appendChild(MovieCard(m, idx < 4));
+      simGrid.appendChild(MovieCard(m, { eager: idx < 4 }));
     });
 
     

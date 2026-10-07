@@ -218,7 +218,7 @@ function renderResultsGrid(container, results, query, totalResults) {
 
   const grid = h('div', { class: 'movie-grid' });
   results.forEach((movie, idx) => {
-    grid.appendChild(MovieCard(movie, idx < 4));
+    grid.appendChild(MovieCard(movie, { eager: idx < 4 }));
   });
   container.appendChild(grid);
 }

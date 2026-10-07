@@ -219,7 +219,7 @@ export function mount(params, container) {
 
         const grid = h('div', { class: 'movie-grid' });
         data.items.slice(0, 12).forEach((movie, idx) => {
-          grid.appendChild(MovieCard(movie, idx < 4));
+          grid.appendChild(MovieCard(movie, { eager: idx < 4 }));
         });
         gridContainer.appendChild(grid);
       })
@@ -250,7 +250,7 @@ export function mount(params, container) {
         
         const grid = h('div', { class: 'movie-grid' });
         data.items.slice(0, 12).forEach((movie, idx) => {
-          grid.appendChild(MovieCard(movie, idx < 4));
+          grid.appendChild(MovieCard(movie, { eager: idx < 4 }));
         });
         popGridContainer.appendChild(grid);
       })

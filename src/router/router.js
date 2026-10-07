@@ -182,7 +182,5 @@ export function createRouter({ main, getPageModule }) {
     doMount(page, { ...params, search: new URLSearchParams(window.location.search) });
   }
 
-  mountPage = (page, params) => doMount(page, params);
-
   return { navigate, replace, start };
 }

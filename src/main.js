@@ -25,6 +25,10 @@ import { DiagnosticsPanel }   from './components/DiagnosticsPanel.js';
 import { h, setText, qs }     from './utils/dom.js';
 import { normalizeQuery }     from './utils/normalizeQuery.js';
 
+import { createRouter } from './router/router.js';
+import * as historyStore from './state/historyStore.js';
+import { showToast } from './components/Toast.js';
+
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 
 const store = createStore();
@@ -67,10 +71,19 @@ const diagPanel = DiagnosticsPanel(diag);
 // Footer with TMDB attribution (required by TMDB terms).
 const footer = h('footer', { class: 'site-footer' });
 const footerText = h('p', { class: 'container' });
-footerText.innerHTML =
-  'This product uses the <a href="https://www.themoviedb.org/" rel="noopener noreferrer">TMDB API</a>' +
-  ' but is not endorsed or certified by TMDB. &nbsp;|&nbsp; ' +
-  '<button class="btn-ghost" id="diag-toggle" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:var(--fs-xs)">Diagnostics</button>';
+const tmdbLink = h('a', { href: 'https://www.themoviedb.org/', rel: 'noopener noreferrer' });
+setText(tmdbLink, 'TMDB API');
+const diagBtn = h('button', {
+  class: 'btn-ghost',
+  id: 'diag-toggle',
+  style: { background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: 'var(--fs-xs)' },
+  'aria-label': 'Diagnostics'
+});
+setText(diagBtn, 'Diagnostics');
+footerText.appendChild(document.createTextNode('This product uses the '));
+footerText.appendChild(tmdbLink);
+footerText.appendChild(document.createTextNode(' but is not endorsed or certified by TMDB.  |  '));
+footerText.appendChild(diagBtn);
 footer.appendChild(footerText);
 
 // Compose the document body.
@@ -86,7 +99,6 @@ if (diagToggleBtn) diagToggleBtn.addEventListener('click', () => diagPanel.toggl
 
 // ── Router setup ──────────────────────────────────────────────────────────────
 
-import { createRouter } from './router/router.js';
 
 function setHeaderInput(value) {
   if (header._setQuery) header._setQuery(value);
@@ -108,7 +120,6 @@ controller.onInput = (raw) => {
 // When search succeeds or user presses enter, we save to history (Phase 12).
 // We do this by observing state changes.
 let lastSearchStatus = null;
-import * as historyStore from './state/historyStore.js';
 store.subscribe(state => {
   const currentStatus = state.search.status;
   if (currentStatus === 'success' && lastSearchStatus !== 'success' && state.search.committedQuery) {
@@ -206,7 +217,6 @@ window.addEventListener('keydown', (e) => {
 
 // ── Toast listener ────────────────────────────────────────────────────────────
 
-import { showToast } from './components/Toast.js';
 window.addEventListener('cinesift:toast', (e) => {
   if (e.detail) showToast(e.detail);
 });

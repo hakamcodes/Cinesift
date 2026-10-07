@@ -17,8 +17,9 @@
  */
 
 /** Check the URL once at module load time. */
-const SKIP_ABORT = typeof window !== 'undefined'
-  && new URLSearchParams(window.location.search).get('noabort') === '1';
+const SKIP_ABORT = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV)
+  ? (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('noabort') === '1')
+  : false;
 
 /**
  * Create a new request manager.

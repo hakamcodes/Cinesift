@@ -24,10 +24,11 @@ import * as watchlistStore from '../state/watchlistStore.js';
  *   posterPath: string|null,
  *   year: number|null,
  *   rating: number|null,
- * }} movie
+ * @param {object} [options]
+ * @param {boolean} [options.eager=false] - If true, image loads eagerly.
  * @returns {HTMLElement}
  */
-export function MovieCard(movie, eager = false) {
+export function MovieCard(movie, { eager = false } = {}) {
   const { id, title = 'Untitled', posterPath, year, rating } = movie;
 
   const article = h('article', { class: 'movie-card' });

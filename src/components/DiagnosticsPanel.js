@@ -70,6 +70,7 @@ export function DiagnosticsPanel(diag) {
     requests:      makeRow('API Requests:', 'diag-req'),
     timersCreated: makeRow('Timers created:', 'diag-tc'),
     timersCancelled: makeRow('Timers cancelled:', 'diag-tcanc'),
+    timersFired:     makeRow('Timers fired:', 'diag-tf'),
     prevented:     makeRow('Prevented:', 'diag-prev-req'),
     aborted:       makeRow('Aborted:', 'diag-aborted'),
     stale:         makeRow('Stale discarded:', 'diag-stale'),
@@ -109,6 +110,7 @@ export function DiagnosticsPanel(diag) {
     safeText(rows.query,      lr.query || '—');
     safeText(rows.status,     lr.status || '—');
     safeText(rows.requestId,  lr.id ? `#${lr.id}` : '—');
+    safeText(rows.prevStatus, lr.prevStatus || '—');
     safeText(rows.ms,         lr.ms !== null ? `${Math.round(lr.ms)} ms` : '—');
     safeText(rows.results,    lr.results !== null ? String(lr.results) : '—');
 
@@ -117,14 +119,11 @@ export function DiagnosticsPanel(diag) {
     safeText(rows2.requests,       snap.apiRequests);
     safeText(rows2.timersCreated,  snap.timersCreated);
     safeText(rows2.timersCancelled, snap.timersCancelled);
+    safeText(rows2.timersFired,    snap.timersFired);
     safeText(rows2.prevented,      snap.prevented);
     safeText(rows2.aborted,        snap.aborted);
     safeText(rows2.stale,          snap.staleDiscarded);
     safeText(rows2.cacheHits,      snap.cacheHits);
-
-    // Static values only need setting once, but doing it on subscribe is harmless.
-    setText(rows2.mode,     TMDB_MODE);
-    setText(rows2.debounce, String(DEBOUNCE_MS));
   });
 
   // ── Panel controls ───────────────────────────────────────────────────────

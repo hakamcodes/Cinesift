@@ -1,5 +1,15 @@
 import { h, setText } from '../utils/dom.js';
 
+/**
+ * FilterBar component for sorting and filtering movies.
+ *
+ * @param {object} props
+ * @param {object} props.filters
+ * @param {Function} props.onFilterChange
+ * @param {boolean} props.isClientSide
+ * @param {Map<number, string>} props.genresMap
+ * @returns {HTMLElement}
+ */
 export function FilterBar({ filters, onFilterChange, isClientSide, genresMap }) {
   const container = h('div', { class: 'filter-bar' });
   

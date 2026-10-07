@@ -30,6 +30,7 @@ export function createDiagnostics() {
     id: 0,
     query: '',
     status: '—',       // SUCCESS | ERROR | ABORTED | STALE
+    prevStatus: '—',
     ms: null,
     results: null,
   };
@@ -40,7 +41,7 @@ export function createDiagnostics() {
   /** Reset all counters to zero. */
   function reset() {
     counts = freshCounts();
-    lastRequest = { id: 0, query: '', status: '—', ms: null, results: null };
+    lastRequest = { id: 0, query: '', status: '—', prevStatus: '—', ms: null, results: null };
     notify();
   }
 
@@ -73,20 +74,24 @@ export function createDiagnostics() {
       // Request lifecycle events (from requestManager)
       case 'request_start':
         counts.apiRequests++;
+        lastRequest.prevStatus = lastRequest.status;
         lastRequest.id = payload.id;
         lastRequest.query = payload.query || '';
         lastRequest.status = 'PENDING';
         break;
       case 'request_abort':
         counts.aborted++;
+        lastRequest.prevStatus = lastRequest.status;
         lastRequest.status = 'ABORTED';
         break;
       case 'request_success':
+        lastRequest.prevStatus = lastRequest.status;
         lastRequest.status = 'SUCCESS';
         lastRequest.ms = payload.ms ?? null;
         lastRequest.results = payload.count ?? null;
         break;
       case 'request_error':
+        lastRequest.prevStatus = lastRequest.status;
         lastRequest.status = 'ERROR';
         lastRequest.ms = payload.ms ?? null;
         break;

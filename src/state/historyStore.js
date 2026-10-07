@@ -12,8 +12,7 @@
  *   - In-memory fallback when localStorage unavailable.
  */
 
-import { isAvailable, writeJSON } from '../utils/storage.js';
-import { readJSON } from '../utils/storage.js';
+import { isAvailable, writeJSON, readJSON } from '../utils/storage.js';
 
 const KEY = 'cinesift:history:v1';
 const CURRENT_VERSION = 1;
